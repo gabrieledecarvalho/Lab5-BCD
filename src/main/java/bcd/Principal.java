@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import exemplo03.UsandoPreparedStmt;
 import exemplo04.UsandoDAO;
 import exemplo04.entities.Pessoa;
+import exemplo05.ExemploMySQL;
 
 public class Principal {
     private final String[] EXEMPLOS = {
@@ -17,7 +18,7 @@ public class Principal {
             "2 - Exemplo 02 - uso de padrões de projeto",
             "3 - Exemplo 03 - uso de PreparedStatement",
             "4 - Exemplo 04 - uso do Data Access Object (DAO)",
-            //"5 - Exemplo 05 - MySQL",
+            "5 - Exemplo 05 - MySQL",
             "6 - Sair do programa"
     };
 
@@ -105,12 +106,12 @@ public class Principal {
                 case 3:
                     p.exemplo03();
                     break;
-                case 4: // Adicionada chamada ao exemplo04
+                case 4:
                     p.exemplo04();
-                break;
-                // case 5:
-                    // p.exemplo05();
-                    // break;
+                    break;
+                case 5:
+                    p.exemplo05();
+                    break;
             }
         } while (opcao != 6);
     }
@@ -255,5 +256,15 @@ public class Principal {
         } catch (InputMismatchException e) {
             System.err.println("ERRO: Dados fornecidos estão em um formato diferente do esperado.");
         }
+    }
+    /**
+     * Executará métodos da classe no pacote exemplo05mysql
+     *
+     * @throws IOException
+     */
+    private void exemplo05() throws IOException {
+        ExemploMySQL exemploMySQL = new ExemploMySQL();
+        // Chama o método que lista todos os departamentos do banco MySQL
+        System.out.println(exemploMySQL.listarDadosDeTodosDepartamentos());
     }
 }

@@ -19,20 +19,21 @@ public abstract class PessoaDAO {
      */
     public final static boolean adiciona(Pessoa p) throws SQLException {
         boolean resultado = false;
-// Comando SQL para inserir os dados na tabela Pessoa
+        // Comando SQL para inserir os dados na tabela Pessoa
         String sql = "INSERT INTO Pessoa (nome, peso, altura, email) VALUES (?,?,?,?)";
-// Try-with-resources para garantir que a conexão e statement sejam fechados automaticamente
+        // Try-with-resources para garantir que a conexão e statement sejam fechados automaticamente
         try (Connection conexao = ConnectionFactory.getDBConnection();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
-// Seta os valores para os parâmetros ? na ordem correta
+            // Seta os valores para os parâmetros ? na ordem correta
             stmt.setString(1, p.getNome());
             stmt.setDouble(2, p.getPeso());
             stmt.setInt(3, p.getAltura());
             stmt.setString(4, p.getEmail());
-// Executa o comando SQL
+            // Executa o comando SQL
+            // REFINE: tá retornando false mesmo que adicione no banco
             resultado = stmt.execute();
         } catch (SQLException ex) {
-// Relança a exceção para ser tratada onde o método for chamado
+            // Relança a exceção para ser tratada onde o método for chamado
             throw new SQLException(ex);
         }
         return resultado;
