@@ -7,6 +7,8 @@ import exemplo02.PadroesDeProjeto;
 import java.io.IOException;
 import java.sql.SQLException;
 import exemplo03.UsandoPreparedStmt;
+import exemplo04.UsandoDAO;
+import exemplo04.entities.Pessoa;
 
 public class Principal {
     private final String[] EXEMPLOS = {
@@ -14,6 +16,8 @@ public class Principal {
             "1 - Exemplo 01",
             "2 - Exemplo 02 - uso de padrões de projeto",
             "3 - Exemplo 03 - uso de PreparedStatement",
+            "4 - Exemplo 04 - uso do Data Access Object (DAO)",
+            //"5 - Exemplo 05 - MySQL",
             "6 - Sair do programa"
     };
 
@@ -33,6 +37,13 @@ public class Principal {
             "2 - Listar dados de uma pessoa",
             "3 - Atualizar email de uma pessoa",
             "4 - Voltar ao menu anterior"
+    };
+
+    private final String[] MENU_EX4 = {
+            "\n...:: Exemplo com Data Access Object (DAO) ::...\n",
+            "1 - Cadastrar pessoa",
+            "2 - Listar todas pessoas",
+            "3 - Voltar ao menu anterior"
     };
 
     private Scanner teclado;
@@ -94,6 +105,12 @@ public class Principal {
                 case 3:
                     p.exemplo03();
                     break;
+                case 4: // Adicionada chamada ao exemplo04
+                    p.exemplo04();
+                break;
+                // case 5:
+                    // p.exemplo05();
+                    // break;
             }
         } while (opcao != 6);
     }
@@ -192,6 +209,49 @@ public class Principal {
                         break;
                 }
             } while (opcao != 6);
+        } catch (InputMismatchException e) {
+            System.err.println("ERRO: Dados fornecidos estão em um formato diferente do esperado.");
+        }
+    }
+
+    private void exemplo04() throws SQLException {
+        int opcao;
+        UsandoDAO app = new UsandoDAO(); // Instância do DAO para manipular dados
+        try {
+            do {
+                opcao = this.menu(this.MENU_EX4); // Exibe o menu específico do exemplo 04
+                switch (opcao) {
+                    case 1: // Cadastrar pessoa
+                        try {
+                            teclado.nextLine(); // Limpa o buffer do teclado
+                            // Entrada de dados do usuário
+                            System.out.print("Entre com o nome: ");
+                            String nome = teclado.nextLine();
+                            System.out.print("Entre com o email: ");
+                            String email = teclado.nextLine();
+                            System.out.print("Entre com o peso: ");
+                            double peso = teclado.nextDouble();
+                            System.out.print("Entre com a altura: ");
+                            int altura = teclado.nextInt();
+                            // Criação do objeto Pessoa com os dados informados
+                            Pessoa p = new Pessoa(nome, peso, altura, email);
+                            // Chamada do método para cadastrar no banco via DAO
+                            boolean resultado = app.cadastrarPessoa(p);
+                            if (resultado) {
+                                System.out.println("\nPessoa cadastrada com sucesso.\n");
+                            } else {
+                                // REFINE: essa linha está sendo mostrada ao invés da outra, mesmo cadastrando a pessoa
+                                System.out.println("\nHouve algum problema e não foi possível cadastrar");
+                            }
+                        } catch (Exception e) {
+                            System.err.println("\nErro com os dados fornecidos. Tente novamente.\n");
+                        }
+                        break;
+                    case 2: // Listar todas as pessoas cadastradas
+                        System.out.println(app.listarPessoas());
+                        break;
+                }
+            } while (opcao != 3); // Voltar ao menu anterior
         } catch (InputMismatchException e) {
             System.err.println("ERRO: Dados fornecidos estão em um formato diferente do esperado.");
         }
